@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -14,7 +13,7 @@ export default function Home() {
 
     //  fetch data from get user api
     axios
-      .get("http://localhost:8000/users/", {
+      .get("http://localhost:8000/api/users/me", {
         headers: { Authorization: token },
       })
       .then((response) => {

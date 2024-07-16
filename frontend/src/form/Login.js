@@ -100,15 +100,6 @@ export default function Login(props) {
               }}
             >
               <span className="underline cursor-pointer">Register</span>
-            </Link>{" "}
-            or{" "}
-            <Link
-              to="/?forgot"
-              onClick={() => {
-                props.setPage("forgot");
-              }}
-            >
-              <span className="underline cursor-pointer">Forgot Password?</span>
             </Link>
           </p>
         </div>

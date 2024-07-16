@@ -59,7 +59,7 @@ def login_for_access_token(username: str, password: str, session: Session = Depe
     access_token = create_access_token({"sub": user.username}, access_token_expires)
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/users/me/", response_model=UserCreate)
+@router.get("/auth/users/", response_model=UserCreate)
 def get_current_user(session: Session = Depends(get_session), token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=401,
