@@ -20,36 +20,41 @@ export default function Register(props) {
     email: "",
     phone_number: "",
     password: "",
-    sgender: "",
+    gender: "",
   });
  
 
   const onChangeForm = (label, event) => {
     switch (label) {
       case "name":
-        setFormRegister({ ...formRegister, name: event.target.value });
-        break;
       case "username":
-        setFormRegister({ ...formRegister, username: event.target.value });
+      case "phone_number":
+      case "password":
+        setFormRegister(prevState => ({
+          ...prevState,
+          [label]: event.target.value
+        }));
         break;
       case "email":
-        // email validation
-        const email_validation = /\S+@\S+\.\S+/;
-        if (email_validation.test(event.target.value)) {
-          setFormRegister({ ...formRegister, email: event.target.value });
+        const emailValidation = /\S+@\S+\.\S+/;
+        if (emailValidation.test(event.target.value)) {
+          setFormRegister(prevState => ({
+            ...prevState,
+            email: event.target.value
+          }));
         }
         break;
-      case "phone_number":
-        setFormRegister({ ...formRegister, phone_number: event.target.value });
-        break;
-      case "password":
-        setFormRegister({ ...formRegister, password: event.target.value });
-        break;
       case "gender":
-        setFormRegister({ ...formRegister, gender: event.target.value });
+        setFormRegister(prevState => ({
+          ...prevState,
+          gender: event.target.value
+        }));
+        break;
+      default:
         break;
     }
   };
+  
 
 
   const onSubmitHandler = async (event) => {
@@ -57,7 +62,7 @@ export default function Register(props) {
     console.log(formRegister);
     // Post to register API
     await axios
-      .post("http://localhost:8080/auth/register", formRegister)
+      .post("http://localhost:8000/api/auth/register", formRegister)
       .then((response) => {
         // move to sign in page
         navigate("/?signin");

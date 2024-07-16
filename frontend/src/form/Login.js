@@ -23,34 +23,38 @@ export default function Login(props) {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(loginForm);
-    // call api login
+    console.log(loginForm); // Log the request body
+    console.log({
+      'Content-Type': 'application/json',
+    }); // Log the request headers
+  
+    // Call API login
     await axios
-      .post("http://localhost:8080/auth/login", loginForm)
+      .post("http://localhost:8000/api/auth/login", loginForm, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .then((response) => {
         console.log(response);
         // Save token to local storage
-        localStorage.setItem("auth_token", response.data.result.access_token);
-        localStorage.setItem(
-          "auth_token_type",
-          response.data.result.token_type
-        );
-
-        // add successfully notif
+        localStorage.setItem("auth_token", response.data.access_token);
+        localStorage.setItem("auth_token_type", response.data.token_type);
+  
+        // Add successfully notification
         toast.success(response.data.detail);
-        // reload page after success login
+        // Reload page after success login
         setTimeout(() => {
           window.location.reload();
         }, 1000);
       })
       .catch((error) => {
-        // add error notif
-        
+        // Add error notification
         console.log(error);
         toast.error(error.response.data.detail);
       });
   };
-
+  
   return (
     <React.Fragment>
       <div>

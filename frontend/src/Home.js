@@ -14,7 +14,7 @@ export default function Home() {
 
     //  fetch data from get user api
     axios
-      .get("http://localhost:8080/users/", {
+      .get("http://localhost:8000/users/", {
         headers: { Authorization: token },
       })
       .then((response) => {

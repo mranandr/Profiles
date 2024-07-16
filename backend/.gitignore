@@ -1,0 +1,4 @@
+.env
+
+/langflow.db 
+/.langchain.db 

@@ -1,46 +1,27 @@
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.config import db
+from router import router as user_router
+from database import create_db_and_tables
 
-origins= [
-    "http://localhost:3000"
+
+app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
 ]
 
-def init_app():
-    db.init()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
+)
 
-    app = FastAPI(
-        title= "profile App",
-        description= "Page",
-        version= "1"
-    )
+app.include_router(user_router, prefix="/api")
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"]
-    )
+create_db_and_tables()
 
-    @app.on_event("startup")
-    async def starup():
-        await db.create_all()
-
-    @app.on_event("shutdown")
-    async def shutdown():
-        await db.close()
-
-    from app.router import authentication, users
-
-    app.include_router(authentication.router)
-    app.include_router(users.router)
-
-    return app
-
-app = init_app()
-
-def start():
-    """Launched with 'poetry run start' at root level """
-    uvicorn.run("app.main:app", host="localhost", port=8080, reload=True)
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
