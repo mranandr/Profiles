@@ -1,4 +1,4 @@
 .env
-
-/langflow.db 
-/.langchain.db 
+venv
+.idea
+pycache

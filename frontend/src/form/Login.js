@@ -5,56 +5,50 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function Login(props) {
-  const [loginForm, setLoginform] = useState({
+  const [loginForm, setLoginForm] = useState({
     username: "",
     password: "",
   });
 
-  const onChangeForm = (label, event) => {
-    switch (label) {
-      case "username":
-        setLoginform({ ...loginForm, username: event.target.value });
-        break;
-      case "password":
-        setLoginform({ ...loginForm, password: event.target.value });
-        break;
-    }
+  const onChangeForm = (event) => {
+    const { name, value } = event.target;
+    setLoginForm({ ...loginForm, [name]: value });
   };
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(loginForm); // Log the request body
-    console.log({
-      'Content-Type': 'application/json',
-    }); // Log the request headers
-  
-    // Call API login
-    await axios
-      .post("http://localhost:8000/api/auth/login", loginForm, {
+    console.log(loginForm);
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/auth/login", loginForm, {
         headers: {
           'Content-Type': 'application/json',
         },
-      })
-      .then((response) => {
-        console.log(response);
-        // Save token to local storage
-        localStorage.setItem("auth_token", response.data.access_token);
-        localStorage.setItem("auth_token_type", response.data.token_type);
-  
-        // Add successfully notification
-        toast.success(response.data.detail);
-        // Reload page after success login
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      })
-      .catch((error) => {
-        // Add error notification
-        console.log(error);
-        toast.error(error.response.data.detail);
       });
+      console.log(response);
+
+      // Save token to local storage
+      localStorage.setItem("auth_token", response.data.access_token);
+      localStorage.setItem("auth_token_type", response.data.token_type);
+
+      // Add success notification
+      toast.success(response.data.detail);
+
+      // Reload page after successful login
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      // Add error notification
+      console.log(error);
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.detail);
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
+    }
   };
-  
+
   return (
     <React.Fragment>
       <div>
@@ -69,19 +63,17 @@ export default function Login(props) {
         <div className="space-y-4">
           <input
             type="text"
+            name="username"
             placeholder="Username"
             className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-yellow-400"
-            onChange={(event) => {
-              onChangeForm("username", event);
-            }}
+            onChange={onChangeForm}
           />
           <input
             type="password"
+            name="password"
             placeholder="Password"
             className="block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:ring focus:outline-none focus:ring-yellow-400"
-            onChange={(event) => {
-              onChangeForm("password", event);
-            }}
+            onChange={onChangeForm}
           />
         </div>
         <div className="text-center mt-6">
@@ -100,6 +92,17 @@ export default function Login(props) {
               }}
             >
               <span className="underline cursor-pointer">Register</span>
+            </Link>
+          </p>
+          <p className="mt-4 text-sm">
+           Forgot password{" "}
+            <Link
+              to="/?forgot"
+              onClick={() => {
+                props.setPage("forgot");
+              }}
+            >
+              <span className="underline cursor-pointer">forgot password</span>
             </Link>
           </p>
         </div>

@@ -1,0 +1,12 @@
+fastapi[all]
+uvicorn[standard]
+sqlalchemy
+jwt
+middleware
+pydantic
+security
+passlib
+python-jose
+psycopg2
+sqlalchemy
+pydantic

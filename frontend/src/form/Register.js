@@ -55,33 +55,21 @@ export default function Register(props) {
     }
   };
   
-
-
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(formRegister);
-    // Post to register API
-    await axios
-      .post("http://localhost:8000/api/auth/register", formRegister)
-      .then((response) => {
-        // move to sign in page
+    try {
+        const response = await axios.post("http://localhost:8000/api/auth/register", formRegister);
         navigate("/?signin");
-
-        // add successfully notif
         toast.success(response.data.detail);
-        // reload page
         setTimeout(() => {
-          window.location.reload();
+            window.location.reload();
         }, 1000);
-
-        console.log(response);
-      })
-      .catch((error) => {
+    } catch (error) {
         console.log(error);
-        // add error notif
         toast.error(error.response.data.detail);
-      });
-  };
+    }
+};
+
 
   return (
     <React.Fragment>

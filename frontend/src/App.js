@@ -4,7 +4,7 @@ import Login from "./form/Login";
 import Register from "./form/Register";
 import Home from "./Home";
 
-function App() {
+export function App() {
   const [page, setPage] = useState("login");
   const [token, setToken] = useState();
 
